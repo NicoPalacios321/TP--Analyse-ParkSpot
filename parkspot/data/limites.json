@@ -1,0 +1,141 @@
+{
+  "nomJeu": "limites",
+  "dateDuJour": "2026-12-03T12:00",
+  "utilisateurs": [
+    {
+      "id": "u1",
+      "identifiant": "li",
+      "nom": "Li",
+      "courriel": "a@b.c",
+      "motDePasse": "Li123456!",
+      "role": "locataire"
+    },
+    {
+      "id": "u2",
+      "identifiant": "maximilien.long",
+      "nom": "Maximilien-Alexandre Bouchard-Lefebvre de la Fontaine-Beauregard Saint-Laurent Desrochers-Villeneuve",
+      "courriel": "maximilien.alexandre.bouchard.lefebvre.delafontaine.beauregard@entreprise-de-stationnement-du-grand-montreal-metropolitain.qc.ca",
+      "motDePasse": "Max123456!",
+      "role": "locataire"
+    },
+    {
+      "id": "u3",
+      "identifiant": "julie.g",
+      "nom": "Julie Gagnon",
+      "courriel": "julie.gagnon@videotron.ca",
+      "motDePasse": "Julie123!",
+      "role": "proprietaire"
+    },
+    {
+      "id": "u4",
+      "identifiant": "zoe.vide",
+      "nom": "Zoé Morin",
+      "courriel": "zoe.morin@gmail.com",
+      "motDePasse": "Zoe12345!",
+      "role": "locataire"
+    }
+  ],
+  "methodesPaiement": [
+    {
+      "id": "m1",
+      "idUtilisateur": "u1",
+      "type": "credit",
+      "numeroCarte": "4242424242424242",
+      "expiration": "2026-12",
+      "solde": 7.00
+    },
+    {
+      "id": "m2",
+      "idUtilisateur": "u1",
+      "type": "debit",
+      "numeroCarte": "4000056655665556",
+      "expiration": "2027-01",
+      "solde": 6.99
+    },
+    {
+      "id": "m3",
+      "idUtilisateur": "u2",
+      "type": "credit",
+      "numeroCarte": "5555555555554444",
+      "expiration": "2035-12",
+      "solde": 999999.99
+    },
+    {
+      "id": "m4",
+      "idUtilisateur": "u2",
+      "type": "debit",
+      "numeroCarte": "5200828282828210",
+      "expiration": "2028-03",
+      "solde": 0.00
+    }
+  ],
+  "stationnements": [
+    {
+      "id": "s1",
+      "idProprietaire": "u3",
+      "adresse": "125 rue Saint-Charles Ouest, Longueuil",
+      "type": "courMaison",
+      "prixHoraire": 3.50,
+      "latitude": 45.5370,
+      "longitude": -73.5100,
+      "reserve": false
+    },
+    {
+      "id": "s2",
+      "idProprietaire": "u3",
+      "adresse": "12345 boulevard du Président-John-Fitzgerald-Kennedy, local 1200, stationnement intérieur niveau P3, entrée par la ruelle derrière le dépanneur, Montréal (Québec) H3B 4W8",
+      "type": "souterrain",
+      "prixHoraire": 99.99,
+      "latitude": 45.5048,
+      "longitude": -73.5698,
+      "reserve": false
+    },
+    {
+      "id": "s3",
+      "idProprietaire": "u3",
+      "adresse": "1 rue A, Longueuil",
+      "type": "ruelle",
+      "prixHoraire": 0.50,
+      "latitude": 45.5310,
+      "longitude": -73.5180,
+      "reserve": false
+    }
+  ],
+  "reservations": [],
+  "vehicules": [
+    {
+      "id": "v1",
+      "idLocataire": "u1",
+      "plaque": "A1",
+      "marque": "Kia",
+      "modele": "Rio",
+      "stationne": true,
+      "latitude": 45.5372,
+      "longitude": -73.5101,
+      "finStationnement": "2026-12-03T12:01"
+    },
+    {
+      "id": "v2",
+      "idLocataire": "u2",
+      "plaque": "ABC 1234",
+      "marque": "Mercedes-Benz",
+      "modele": "Classe GLE 450 4MATIC Coupé Édition Spéciale",
+      "stationne": true,
+      "latitude": 45.5049,
+      "longitude": -73.5697,
+      "finStationnement": "2026-12-03T12:00"
+    },
+    {
+      "id": "v3",
+      "idLocataire": "u2",
+      "plaque": "XYZ 9876",
+      "marque": "Ford",
+      "modele": "F-150",
+      "stationne": true,
+      "latitude": 45.5311,
+      "longitude": -73.5181,
+      "finStationnement": "2026-12-03T11:59"
+    }
+  ],
+  "courriels": []
+}

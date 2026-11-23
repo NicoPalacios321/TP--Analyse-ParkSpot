@@ -1,0 +1,165 @@
+{
+  "nomJeu": "normal",
+  "dateDuJour": "2026-12-03T12:00",
+  "utilisateurs": [
+    {
+      "id": "u1",
+      "identifiant": "marie.t",
+      "nom": "Marie Tremblay",
+      "courriel": "marie.tremblay@gmail.com",
+      "motDePasse": "Marie123!",
+      "role": "locataire"
+    },
+    {
+      "id": "u2",
+      "identifiant": "karim.b",
+      "nom": "Karim Benali",
+      "courriel": "karim.benali@outlook.com",
+      "motDePasse": "Karim123!",
+      "role": "locataire"
+    },
+    {
+      "id": "u3",
+      "identifiant": "julie.g",
+      "nom": "Julie Gagnon",
+      "courriel": "julie.gagnon@videotron.ca",
+      "motDePasse": "Julie123!",
+      "role": "proprietaire"
+    },
+    {
+      "id": "u4",
+      "identifiant": "pierre.r",
+      "nom": "Pierre Roy",
+      "courriel": "pierre.roy@hotmail.com",
+      "motDePasse": "Pierre123!",
+      "role": "proprietaire"
+    }
+  ],
+  "methodesPaiement": [
+    {
+      "id": "m1",
+      "idUtilisateur": "u1",
+      "type": "credit",
+      "numeroCarte": "4242424242424242",
+      "expiration": "2028-05",
+      "solde": 500.00
+    },
+    {
+      "id": "m2",
+      "idUtilisateur": "u1",
+      "type": "debit",
+      "numeroCarte": "4000056655665556",
+      "expiration": "2027-09",
+      "solde": 150.00
+    },
+    {
+      "id": "m3",
+      "idUtilisateur": "u2",
+      "type": "credit",
+      "numeroCarte": "5555555555554444",
+      "expiration": "2029-01",
+      "solde": 300.00
+    }
+  ],
+  "stationnements": [
+    {
+      "id": "s1",
+      "idProprietaire": "u3",
+      "adresse": "125 rue Saint-Charles Ouest, Longueuil",
+      "type": "courMaison",
+      "prixHoraire": 3.50,
+      "latitude": 45.5370,
+      "longitude": -73.5100,
+      "reserve": false
+    },
+    {
+      "id": "s2",
+      "idProprietaire": "u3",
+      "adresse": "4500 rue Saint-Denis, Montréal",
+      "type": "ruelle",
+      "prixHoraire": 4.00,
+      "latitude": 45.5250,
+      "longitude": -73.5840,
+      "reserve": false
+    },
+    {
+      "id": "s3",
+      "idProprietaire": "u4",
+      "adresse": "1000 boulevard De Maisonneuve Ouest, Montréal",
+      "type": "souterrain",
+      "prixHoraire": 6.00,
+      "latitude": 45.5017,
+      "longitude": -73.5673,
+      "reserve": true
+    },
+    {
+      "id": "s4",
+      "idProprietaire": "u4",
+      "adresse": "2500 boulevard Taschereau, Greenfield Park",
+      "type": "courMaison",
+      "prixHoraire": 2.75,
+      "latitude": 45.4870,
+      "longitude": -73.4800,
+      "reserve": false
+    }
+  ],
+  "reservations": [
+    {
+      "id": "r1",
+      "idLocataire": "u2",
+      "idStationnement": "s3",
+      "idMethode": "m3",
+      "nbHeures": 2,
+      "prix": 12.00,
+      "date": "2026-12-02T09:00",
+      "statut": "Confirmée"
+    }
+  ],
+  "vehicules": [
+    {
+      "id": "v1",
+      "idLocataire": "u1",
+      "plaque": "F12 ABC",
+      "marque": "Honda",
+      "modele": "Civic",
+      "stationne": true,
+      "latitude": 45.5371,
+      "longitude": -73.5102,
+      "finStationnement": "2026-12-03T17:00"
+    },
+    {
+      "id": "v2",
+      "idLocataire": "u1",
+      "plaque": "G45 KLM",
+      "marque": "Toyota",
+      "modele": "RAV4",
+      "stationne": true,
+      "latitude": 45.5251,
+      "longitude": -73.5838,
+      "finStationnement": "2026-12-03T20:00"
+    },
+    {
+      "id": "v3",
+      "idLocataire": "u1",
+      "plaque": "H78 NOP",
+      "marque": "Hyundai",
+      "modele": "Elantra",
+      "stationne": false,
+      "latitude": null,
+      "longitude": null,
+      "finStationnement": null
+    },
+    {
+      "id": "v4",
+      "idLocataire": "u2",
+      "plaque": "J90 QRS",
+      "marque": "Mazda",
+      "modele": "3",
+      "stationne": true,
+      "latitude": 45.5018,
+      "longitude": -73.5675,
+      "finStationnement": "2026-12-03T15:00"
+    }
+  ],
+  "courriels": []
+}
