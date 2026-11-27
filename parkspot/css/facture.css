@@ -1,0 +1,155 @@
+/* =============================================================
+   facture.css — Apparence du détail d'une facture (courriel.html)
+   Le détail est construit par creerDetailFacture() dans courriel.html.
+   ============================================================= */
+
+/* ----- Conteneur de la page courriel : largeur limitée et centrée -----
+   Contient le titre, la ligne « Connecté », « Mes factures » et la zone Test :
+   tout est aligné sur les mêmes bords. */
+.conteneur-courriel {
+    max-width: 800px;
+    margin: 0 auto;                /* auto à gauche et à droite = centré */
+}
+
+/* Le formulaire « Entrez un courriel » est ajouté par js/facture.js à la fin
+   du <body>, donc hors du conteneur. On l'aligne sur le conteneur.
+   !important est nécessaire : facture.js lui donne une marge en style inline. */
+.facture-formulaire {
+    box-sizing: border-box;
+    max-width: 800px;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
+/* ----- Flèche qui montre qu'une ligne s'ouvre -----
+   aria-expanded est déjà mis à jour par le clic dans courriel.html :
+   "false" = fermée (▸), "true" = ouverte (▾). */
+.ligne-facture::before {
+    content: "▸";
+    content: "▸" / "";            /* "" : les lecteurs d'écran ne lisent pas la flèche */
+    width: 1em;
+    color: #1f3a5f;
+}
+
+.ligne-facture[aria-expanded="true"]::before {
+    content: "▾";
+    content: "▾" / "";
+}
+
+/* Le curseur en forme de main (cursor: pointer) est déjà défini
+   sur .ligne-facture dans css/commun.css. */
+
+/* La "feuille" de la facture */
+.facture-doc {
+    max-width: 36em;
+    padding: 16px 20px;
+    background: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    color: #222;
+}
+
+.facture-doc p,
+.facture-doc h3,
+.facture-doc h4 {
+    margin: 0;
+}
+
+/* Les longs textes (courriel, adresse) passent à la ligne au lieu de déborder */
+.facture-doc-valeur,
+.facture-doc-infos {
+    overflow-wrap: anywhere;
+}
+
+/* ----- En-tête ----- */
+.facture-doc-entete {
+    display: flex;
+    flex-wrap: wrap;               /* sur petit écran, les infos passent dessous */
+    justify-content: space-between;
+    gap: 8px 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #1f3a5f;
+}
+
+.facture-doc-marque {
+    color: #1f3a5f;
+    font-weight: bold;
+    letter-spacing: 0.05em;
+}
+
+.facture-doc-titre {
+    font-size: 1.5rem;
+}
+
+/* Réservation et date, en haut à droite */
+.facture-doc-infos {
+    text-align: right;
+    color: #555;
+    min-width: 0;
+}
+
+/* ----- Envoyée à ----- */
+.facture-doc-envoi {
+    margin: 12px 0;
+}
+
+.facture-doc-envoi h4 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: #555;
+}
+
+/* ----- Lignes (stationnement, paiement) ----- */
+.facture-doc-ligne {
+    display: flex;
+    gap: 16px;
+    padding: 8px 0;
+    border-top: 1px solid #e3e3e3;
+}
+
+.facture-doc-libelle {
+    flex: 0 0 8.5em;               /* largeur fixe : les valeurs sont alignées */
+    color: #555;
+}
+
+.facture-doc-ligne .facture-doc-valeur {
+    flex: 1;
+    min-width: 0;                  /* permet au texte long de passer à la ligne */
+    text-align: right;
+}
+
+/* ----- Total ----- */
+.facture-doc-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: 4px;
+    padding-top: 10px;
+    border-top: 2px solid #1f3a5f;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+/* ----- Message de remerciement ----- */
+.facture-doc .facture-doc-merci {  /* plus précis que ".facture-doc p" : sa marge l'emporte */
+    margin-top: 16px;
+    font-size: 0.9rem;
+    color: #555;
+    text-align: center;
+}
+
+/* Petits écrans : libellé au-dessus de la valeur */
+@media (max-width: 480px) {
+    .facture-doc-ligne {
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .facture-doc-libelle {
+        flex-basis: auto;
+    }
+
+    .facture-doc-ligne .facture-doc-valeur {
+        text-align: left;
+    }
+}

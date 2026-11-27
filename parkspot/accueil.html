@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParkSpot — Accueil</title>
+</head>
+<body>
+    <h1>ParkSpot — Test du module de données</h1>
+
+    <!-- Choix du jeu de données -->
+    <p>
+        <label for="choixJeu">Jeu de données :</label>
+        <select id="choixJeu">
+            <option value="normal">normal</option>
+            <option value="limites">limites</option>
+            <option value="erreurs">erreurs</option>
+        </select>
+        <button id="btnReinitialiser" type="button">Réinitialiser les données</button>
+    </p>
+
+    <!-- Résumé des données actuelles -->
+    <ul>
+        <li>Jeu actuel : <strong id="nomJeu">…</strong></li>
+        <li>Utilisateurs : <span id="nbUtilisateurs">…</span></li>
+        <li>Méthodes de paiement : <span id="nbMethodes">…</span></li>
+        <li>Stationnements : <span id="nbStationnements">…</span></li>
+        <li>Réservations : <span id="nbReservations">…</span></li>
+        <li>Véhicules : <span id="nbVehicules">…</span></li>
+    </ul>
+
+    <!-- Message d'erreur éventuel (ex. : page ouverte sans Live Server) -->
+    <p id="message"></p>
+
+    <script src="js/commun.js"></script>
+    <script>afficherMenu();</script>
+    <script src="js/donnees.js"></script>
+    <script>
+        // Raccourcis vers les éléments de la page
+        const choixJeu = document.getElementById("choixJeu");
+        const btnReinitialiser = document.getElementById("btnReinitialiser");
+        const message = document.getElementById("message");
+
+        // Met à jour l'affichage à partir des données sauvegardées
+        function afficherResume() {
+            const donnees = lireDonnees();
+            document.getElementById("nomJeu").textContent = donnees.nomJeu;
+            document.getElementById("nbUtilisateurs").textContent = donnees.utilisateurs.length;
+            document.getElementById("nbMethodes").textContent = donnees.methodesPaiement.length;
+            document.getElementById("nbStationnements").textContent = donnees.stationnements.length;
+            document.getElementById("nbReservations").textContent = donnees.reservations.length;
+            document.getElementById("nbVehicules").textContent = donnees.vehicules.length;
+            // La liste déroulante reflète le jeu actuel (utile après F5)
+            choixJeu.value = donnees.nomJeu;
+            message.textContent = "";
+        }
+
+        // Affiche une erreur à l'écran et dans la console
+        function afficherErreur(erreur) {
+            console.error(erreur);
+            message.textContent = "Erreur : " + erreur.message;
+        }
+
+        // Au chargement : on attend que les données soient prêtes
+        donneesPretes.then(afficherResume).catch(afficherErreur);
+
+        // Changer de jeu recharge les données du fichier choisi
+        choixJeu.addEventListener("change", function () {
+            chargerJeu(choixJeu.value).then(afficherResume).catch(afficherErreur);
+        });
+
+        // Remet les données du jeu actuel
+        btnReinitialiser.addEventListener("click", function () {
+            reinitialiser().then(afficherResume).catch(afficherErreur);
+        });
+    </script>
+</body>
+</html>

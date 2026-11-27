@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ParkSpot — Courriels</title>
+    <link rel="stylesheet" href="css/facture.css">
+    <style>
+        /* Les styles de la liste des factures sont dans css/commun.css */
+        .zone-test { border: 2px dashed #888; padding: 8px 12px; margin-top: 24px; }
+    </style>
+</head>
+<body>
+    <!-- Conteneur centré (~800 px) : tout le contenu sous le menu.
+         Le menu est ajouté au début du <body> par afficherMenu(), donc en dehors. -->
+    <main class="conteneur-courriel">
+        <h1>Ma boîte courriel</h1>
+        <p id="infoUtilisateur"></p>
+
+        <!-- Mes factures : liste courte, la plus récente en haut. Clic = détail -->
+        <section class="mes-factures">
+            <h2>Mes factures</h2>
+            <div id="boiteCourriel"></div>
+        </section>
+
+        <!-- Zone de test : à retirer quand la US 3 (paiement) sera prête -->
+        <section class="zone-test">
+            <h2>Test</h2>
+
+            <!-- Visible seulement si js/session.js ne fournit pas encore utilisateurConnecte() -->
+            <p id="zoneConnexionTest" hidden>
+                <label for="choixUtilisateurTest">Connecté en tant que (test) :</label>
+                <select id="choixUtilisateurTest"></select>
+            </p>
+
+            <button id="btnSimulerPaiement" type="button">Simuler un paiement</button>
+            <p id="messageTest"></p>
+        </section>
+    </main>
+
+    <script src="js/commun.js"></script>
+    <script>afficherMenu();</script>
+    <script src="js/donnees.js"></script>
+    <script src="js/session.js"></script>
+    <script src="js/facture.js"></script>
+    <script>
+        const boiteCourriel = document.getElementById("boiteCourriel");
+        const infoUtilisateur = document.getElementById("infoUtilisateur");
+        const messageTest = document.getElementById("messageTest");
+        const zoneConnexionTest = document.getElementById("zoneConnexionTest");
+        const choixUtilisateurTest = document.getElementById("choixUtilisateurTest");
+
+        // Vrai si js/session.js fournit déjà utilisateurConnecte()
+        const sessionDisponible = (typeof utilisateurConnecte === "function");
+
+        /**
+         * Retourne le locataire connecté, relu dans les données
+         * (pour avoir son courriel à jour), ou null.
+         */
+        function obtenirUtilisateur() {
+            let id = null;
+            if (sessionDisponible) {
+                const utilisateur = utilisateurConnecte();
+                id = utilisateur ? utilisateur.id : null;
+            } else {
+                // Solution de secours pour les tests : choix dans la liste
+                id = choixUtilisateurTest.value;
+            }
+            const donnees = lireDonnees();
+            return donnees.utilisateurs.find(function (u) { return u.id === id; }) || null;
+        }
+
+        /** Remplit la liste de test avec les locataires du jeu actuel */
+        function remplirChoixUtilisateurTest() {
+            const donnees = lireDonnees();
+            const ancienChoix = choixUtilisateurTest.value;
+            choixUtilisateurTest.innerHTML = "";
+            donnees.utilisateurs
+                .filter(function (u) { return u.role === "locataire"; })
+                .forEach(function (u) {
+                    const option = document.createElement("option");
+                    option.value = u.id;
+                    option.textContent = u.identifiant;
+                    choixUtilisateurTest.appendChild(option);
+                });
+            if (ancienChoix) {
+                choixUtilisateurTest.value = ancienChoix;
+            }
+        }
+
+        /**
+         * Crée un élément HTML avec une classe et un texte.
+         * textContent : le texte n'est jamais interprété comme du HTML.
+         */
+        function creerElement(balise, classe, texte) {
+            const element = document.createElement(balise);
+            if (classe) {
+                element.className = classe;
+            }
+            if (texte !== undefined) {
+                element.textContent = texte;
+            }
+            return element;
+        }
+
+        /** Affiche les factures du locataire connecté, la plus récente en haut */
+        function afficherBoite() {
+            boiteCourriel.innerHTML = "";
+            const utilisateur = obtenirUtilisateur();
+
+            if (!utilisateur) {
+                infoUtilisateur.textContent = "Aucun utilisateur connecté.";
+                return;
+            }
+            infoUtilisateur.textContent = "Connecté : " + utilisateur.nom +
+                " — courriel du profil : " + (utilisateur.courriel || "(aucun)");
+
+            // Les factures du locataire sont celles envoyées à son courriel.
+            // On inverse la liste : la dernière ajoutée est la plus récente.
+            const donnees = lireDonnees();
+            const factures = donnees.courriels
+                .filter(function (f) { return f.destinataire === utilisateur.courriel; })
+                .reverse();
+
+            if (factures.length === 0) {
+                const vide = document.createElement("p");
+                vide.textContent = "Aucune facture pour l'instant";
+                boiteCourriel.appendChild(vide);
+                return;
+            }
+
+            const liste = document.createElement("ul");
+            liste.className = "liste-factures";
+
+            factures.forEach(function (f) {
+                const element = document.createElement("li");
+
+                // Ligne courte : date, sujet, montant.
+                // Un <button> est cliquable ET utilisable au clavier (Tab + Entrée).
+                const ligne = document.createElement("button");
+                ligne.type = "button";
+                ligne.className = "ligne-facture";
+                ligne.setAttribute("aria-expanded", "false"); // détail fermé au départ
+
+                const date = document.createElement("span");
+                date.className = "ligne-facture-date";
+                date.textContent = formaterDateFacture(f.date);
+                const sujet = document.createElement("span");
+                sujet.className = "ligne-facture-sujet";
+                sujet.textContent = f.sujet;
+                const montant = document.createElement("span");
+                montant.className = "ligne-facture-montant";
+                montant.textContent = formaterMontant(f.montant);
+                ligne.append(date, sujet, montant);
+
+                // Détail complet, caché jusqu'au clic
+                const detail = creerDetailFacture(f);
+                detail.hidden = true;
+
+                // Un clic ouvre le détail; un deuxième clic le referme
+                ligne.addEventListener("click", function () {
+                    detail.hidden = !detail.hidden;
+                    ligne.setAttribute("aria-expanded", String(!detail.hidden));
+                });
+
+                element.append(ligne, detail);
+                liste.appendChild(element);
+            });
+
+            boiteCourriel.appendChild(liste);
+        }
+
+        // Texte affiché pour la méthode de paiement ("credit" -> "Crédit")
+        const NOMS_METHODES = { credit: "Crédit", debit: "Débit" };
+
+        /**
+         * Construit le détail d'une facture, présenté comme une vraie facture.
+         * Utilise seulement les champs existants de la facture.
+         */
+        function creerDetailFacture(f) {
+            const detail = creerElement("div", "detail-facture");
+            const doc = creerElement("article", "facture-doc");
+
+            // En-tête : ParkSpot + « Facture » à gauche, réservation et date à droite
+            const entete = creerElement("header", "facture-doc-entete");
+            const marque = creerElement("div");
+            marque.append(
+                creerElement("p", "facture-doc-marque", "ParkSpot"),
+                creerElement("h3", "facture-doc-titre", "Facture")
+            );
+            const infos = creerElement("div", "facture-doc-infos");
+            const reservation = creerElement("p", null, "Réservation ");
+            reservation.appendChild(creerElement("strong", null, f.idReservation));
+            infos.append(reservation, creerElement("p", null, formaterDateFacture(f.date)));
+            entete.append(marque, infos);
+
+            // Envoyée à : le destinataire
+            const envoi = creerElement("section", "facture-doc-envoi");
+            envoi.append(
+                creerElement("h4", null, "Envoyée à"),
+                creerElement("p", "facture-doc-valeur", f.destinataire)
+            );
+
+            // Lignes : stationnement et paiement
+            const lignes = creerElement("div", "facture-doc-lignes");
+            lignes.append(
+                creerLigneFacture("Stationnement", f.adresseStationnement),
+                creerLigneFacture("Paiement", (NOMS_METHODES[f.methode] || f.methode) + " " + f.carteMasquee)
+            );
+
+            // Total bien visible
+            const total = creerElement("div", "facture-doc-total");
+            total.append(
+                creerElement("span", null, "Total"),
+                creerElement("strong", null, formaterMontant(f.montant))
+            );
+
+            const merci = creerElement("p", "facture-doc-merci",
+                "Merci d'avoir utilisé ParkSpot. Cette facture est votre preuve de paiement.");
+
+            doc.append(entete, envoi, lignes, total, merci);
+            detail.appendChild(doc);
+            return detail;
+        }
+
+        /** Une ligne de la facture : libellé à gauche, valeur à droite */
+        function creerLigneFacture(libelle, valeur) {
+            const ligne = creerElement("div", "facture-doc-ligne");
+            ligne.append(
+                creerElement("span", "facture-doc-libelle", libelle),
+                creerElement("span", "facture-doc-valeur", valeur)
+            );
+            return ligne;
+        }
+
+        /**
+         * TEST SEULEMENT : crée une fausse réservation de 2 heures pour s1
+         * avec la première méthode du locataire, puis appelle envoyerFacture.
+         */
+        function simulerPaiement() {
+            messageTest.textContent = "";
+            const utilisateur = obtenirUtilisateur();
+            if (!utilisateur || utilisateur.role !== "locataire") {
+                messageTest.textContent = "Il faut être connecté avec un locataire.";
+                return;
+            }
+
+            const donnees = lireDonnees();
+
+            // Mois du jour au format "AAAA-MM" (ex. "2026-12"), pour comparer avec l'expiration.
+            // Une carte qui expire "2026-12" est encore valide en décembre 2026.
+            const moisDuJour = donnees.dateDuJour.slice(0, 7);
+
+            // Première méthode du locataire qui n'est PAS expirée
+            // (les dates "AAAA-MM" se comparent correctement comme du texte)
+            const methode = donnees.methodesPaiement.find(function (m) {
+                return m.idUtilisateur === utilisateur.id && m.expiration >= moisDuJour;
+            });
+            if (!methode) {
+                messageTest.textContent = "Impossible de simuler : aucune méthode de paiement non expirée pour ce locataire.";
+                return;
+            }
+
+            // Stationnement libre : s1 s'il est libre, sinon le premier stationnement libre
+            const stationnementsLibres = donnees.stationnements.filter(function (s) { return !s.reserve; });
+            const stationnement = stationnementsLibres.find(function (s) { return s.id === "s1"; })
+                || stationnementsLibres[0];
+            if (!stationnement) {
+                messageTest.textContent = "Impossible de simuler : aucun stationnement libre.";
+                return;
+            }
+
+            // Fausse réservation, utilisée SEULEMENT pour la facture : elle n'est pas
+            // ajoutée dans donnees.reservations (c'est le rôle de la US 3).
+            // L'id commence par "test-" pour ne jamais être confondu avec une vraie réservation.
+            // Comme elle n'est pas enregistrée, on choisit un numéro qu'aucune
+            // facture n'utilise encore : test-r1, test-r2, test-r3...
+            let numeroTest = 1;
+            while (donnees.courriels.some(function (c) { return c.idReservation === "test-r" + numeroTest; })) {
+                numeroTest++;
+            }
+            const nbHeures = 2;
+            const reservation = {
+                id: "test-r" + numeroTest,
+                idLocataire: utilisateur.id,
+                idStationnement: stationnement.id,
+                idMethode: methode.id,
+                nbHeures: nbHeures,
+                prix: stationnement.prixHoraire * nbHeures,
+                date: donnees.dateDuJour,
+                statut: "Confirmée"
+            };
+
+            envoyerFacture(reservation)
+                .then(afficherBoite)
+                .catch(function (erreur) {
+                    console.error(erreur);
+                    messageTest.textContent = "Erreur : " + erreur.message;
+                });
+        }
+
+        // Démarrage : on attend que les données soient prêtes
+        donneesPretes.then(function () {
+            if (!sessionDisponible) {
+                zoneConnexionTest.hidden = false;
+                remplirChoixUtilisateurTest();
+                choixUtilisateurTest.addEventListener("change", afficherBoite);
+            }
+            document.getElementById("btnSimulerPaiement").addEventListener("click", simulerPaiement);
+            afficherBoite();
+        }).catch(function (erreur) {
+            console.error(erreur);
+            infoUtilisateur.textContent = "Erreur : " + erreur.message;
+        });
+    </script>
+</body>
+</html>
