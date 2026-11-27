@@ -39,16 +39,18 @@
     message.className = `message ${erreur ? "erreur" : "succes"}`;
   }
 
+  const regles = window.ParkSpotMethodes;
+
   function normaliserCarte(valeur) {
-    return valeur.replace(/[^0-9]/g, "");
+    return regles.normaliserNumeroCarte(valeur);
   }
 
   function validerNumeroCarte(numero) {
-    return /^\d{13,19}$/.test(numero);
+    return regles.validerNumeroCarte(numero);
   }
 
   function clotureMois(expiration) {
-    return /^\d{4}-\d{2}$/.test(expiration) && expiration >= moisCourant();
+    return regles.validerExpiration(expiration, donnees && donnees.dateDuJour);
   }
 
   function lireSauvegardes() {
