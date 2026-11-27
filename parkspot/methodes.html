@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ParkSpot — Méthodes de paiement</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="conteneur">
+    <section class="carte" aria-labelledby="titre">
+      <header class="entete">
+        <div>
+          <p class="fil">Mon profil</p>
+          <h1 id="titre">Méthodes de paiement</h1>
+        </div>
+        <p id="locataire" class="badge">Locataire</p>
+      </header>
+
+      <section class="configuration" aria-label="Configuration du test">
+        <div class="grille controles">
+          <label class="champ">
+            <span>Jeu de données</span>
+            <select id="jeuDonnees">
+              <option value="normal">Normal</option>
+              <option value="limites">Limites</option>
+              <option value="erreurs">Erreurs</option>
+            </select>
+          </label>
+
+          <label class="champ">
+            <span>Locataire connecté</span>
+            <select id="locataireSelect"></select>
+          </label>
+        </div>
+      </section>
+
+      <form id="formulairePaiement" novalidate>
+        <div class="grille">
+          <label class="champ">
+            <span>Type de paiement</span>
+            <select id="type" required>
+              <option value="">Choisir...</option>
+              <option value="credit">Crédit</option>
+              <option value="debit">Débit</option>
+            </select>
+          </label>
+
+          <label class="champ">
+            <span>Numéro de carte</span>
+            <input id="numeroCarte" type="text" inputmode="numeric" autocomplete="cc-number"
+                   maxlength="19" placeholder="4242 4242 4242 4242" required>
+          </label>
+
+          <label class="champ">
+            <span>Expiration</span>
+            <input id="expiration" type="month" required>
+          </label>
+
+          <label class="champ">
+            <span>Solde ($)</span>
+            <input id="solde" type="number" min="0" step="0.01" value="0.00" required>
+          </label>
+        </div>
+
+        <p id="message" class="message" role="alert" aria-live="polite"></p>
+
+        <div class="actions">
+          <button id="annuler" class="bouton secondaire" type="button">Annuler</button>
+          <button class="bouton primaire" type="submit">Enregistrer</button>
+        </div>
+      </form>
+
+      <section class="liste" aria-labelledby="titreListe">
+        <h2 id="titreListe">Mes méthodes enregistrées</h2>
+        <div id="methodes"></div>
+        <div class="actions selection-actions">
+          <button id="confirmer" class="bouton primaire" type="button" disabled>Choisir</button>
+        </div>
+      </section>
+    </section>
+  </main>
+  <script src="js/methodes.js"></script>
+</body>
+</html>

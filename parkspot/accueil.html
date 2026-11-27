@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ParkSpot — Accueil</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="conteneur accueil">
+    <section class="carte">
+      <h1>Accueil ParkSpot</h1>
+      <p>Aucune modification de méthode de paiement n'a été enregistrée.</p>
+      <p><a href="methodes.html">Gérer mes méthodes de paiement</a></p>
+      <p id="confirmationPaiement"></p>
+    </section>
+  </main>
+  <script>
+    const confirmation = document.querySelector("#confirmationPaiement");
+    const methodeId = sessionStorage.getItem("parkspotMethodeSelectionnee");
+    const detailsJson = sessionStorage.getItem("parkspotMethodeSelectionneeDetails");
+    if (detailsJson) {
+      const methode = JSON.parse(detailsJson);
+      const derniersChiffres = methode.numeroCarte.slice(-4);
+      confirmation.textContent = `Méthode confirmée : ${methode.type === "credit" ? "Crédit" : "Débit"} — •••• ${derniersChiffres}, expiration ${methode.expiration}`;
+    } else {
+      confirmation.textContent = "Aucune modification de méthode de paiement n'a été enregistrée.";
+    }
+  </script>
+</body>
+</html>
