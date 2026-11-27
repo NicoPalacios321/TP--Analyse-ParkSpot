@@ -1,0 +1,65 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  color: #1f2937;
+  background: #f4f7f6;
+}
+
+.entete {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 24px;
+  background: #176b5b;
+}
+
+.entete a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+main { padding: 24px; }
+
+.notification {
+  min-height: 42px;
+  margin: 16px 0;
+  padding: 12px;
+  border-radius: 6px;
+  background: #eef2f7;
+}
+
+.notification.succes { background: #dcfce7; color: #166534; }
+.notification.erreur { background: #fee2e2; color: #991b1b; }
+.notification.info { background: #dbeafe; color: #1e40af; }
+
+.zone-vehicules {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 16px;
+}
+
+.liste-vehicules { display: grid; gap: 12px; }
+
+.vehicule-carte {
+  padding: 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: white;
+}
+
+.vehicule-carte h2 { margin: 0 0 8px; font-size: 18px; }
+.vehicule-carte p { margin: 4px 0; }
+
+.carte {
+  min-height: 520px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+}
+
+@media (max-width: 700px) {
+  .zone-vehicules { grid-template-columns: 1fr; }
+  .carte { min-height: 400px; }
+}

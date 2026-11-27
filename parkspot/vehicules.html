@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mes véhicules - ParkSpot</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="entete">
+    <a class="logo" href="accueil.html">ParkSpot</a>
+    <nav>
+      <a class="actif" href="vehicules.html">Mes véhicules</a>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Mes véhicules stationnés</h1>
+
+    <div id="notification" class="notification" role="status" aria-live="polite"></div>
+
+    <section class="zone-vehicules">
+      <div id="liste-vehicules" class="liste-vehicules" aria-label="Liste des véhicules stationnés"></div>
+      <div id="carte" class="carte" aria-label="Carte des positions des véhicules"></div>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="js/vehicules.js"></script>
+</body>
+</html>
