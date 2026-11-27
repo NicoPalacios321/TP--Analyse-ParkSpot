@@ -3,38 +3,74 @@
 
   const notification = document.querySelector("#notification");
   const liste = document.querySelector("#liste-vehicules");
-  const carteElement = document.querySelector("#carte");
 
-  function lireJsonSession() {
-    const clefs = ["utilisateurConnecte", "locataireConnecte", "utilisateur", "session", "utilisateurCourant", "sessionUtilisateur"];
+  function afficherNotification(message) {
+    if (typeof window.afficherNotification === "function") {
+      window.afficherNotification(message);
+      return;
+    }
 
-    for (const clef of clefs) {
-      const valeur = sessionStorage.getItem(clef);
-      if (!valeur) continue;
+    if (window.ParkSpotCommun?.afficherNotification) {
+      window.ParkSpotCommun.afficherNotification(message);
+      return;
+    }
 
-      try {
-        const objet = JSON.parse(valeur);
-        if (objet && objet.id) return objet;
-        if (objet && objet.utilisateur && objet.utilisateur.id) return objet.utilisateur;
-      } catch (_) {
-        // Certaines versions peuvent enregistrer seulement l'identifiant.
-        if (valeur) return { id: valeur };
-      }
+    if (notification) {
+      notification.textContent = message;
+      notification.className = "notification";
+      notification.hidden = false;
+    }
+  }
+
+  function lireUtilisateurConnecte() {
+    if (typeof window.utilisateurConnecte === "function") {
+      return window.utilisateurConnecte();
+    }
+
+    if (window.ParkSpotSession?.utilisateurConnecte) {
+      return window.ParkSpotSession.utilisateurConnecte();
+    }
+
+    const id = localStorage.getItem("parkspot_session");
+    if (!id) return null;
+
+    const donnees = lireDonneesLocales();
+    return donnees?.utilisateurs?.find((utilisateur) => utilisateur.id === id) || null;
+  }
+
+  function lireDonneesLocales() {
+    if (typeof window.lireDonnees === "function") {
+      return window.lireDonnees();
+    }
+
+    if (window.ParkSpotDonnees?.lireDonnees) {
+      return window.ParkSpotDonnees.lireDonnees();
+    }
+
+    const valeur = localStorage.getItem("parkspot_donnees");
+    if (!valeur) return null;
+
+    try {
+      return JSON.parse(valeur);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  async function chargerDonneesLocales() {
+    let donnees = lireDonneesLocales();
+
+    if (donnees) return donnees;
+
+    if (typeof window.chargerJeu === "function") {
+      return window.chargerJeu("normal");
+    }
+
+    if (window.ParkSpotDonnees?.chargerJeu) {
+      return window.ParkSpotDonnees.chargerJeu("normal");
     }
 
     return null;
-  }
-
-  function afficherNotification(message, type = "info") {
-    notification.textContent = message;
-    notification.className = `notification ${type}`;
-  }
-
-  function determineDataset() {
-    const parametre = new URLSearchParams(window.location.search).get("jeu")?.toLowerCase();
-    const stocke = sessionStorage.getItem("jeuDonnees")?.toLowerCase();
-    const candidat = parametre || stocke || "normal";
-    return ["normal", "limites", "erreurs"].includes(candidat) ? candidat : "normal";
   }
 
   function stationnementActif(vehicule, dateDuJour) {
@@ -44,7 +80,9 @@
     const maintenant = new Date(dateDuJour);
 
     if (Number.isNaN(fin.getTime()) || Number.isNaN(maintenant.getTime())) return false;
-    if (fin < maintenant) return false;
+
+    // À la date et à l'heure de fin, le stationnement est terminé.
+    if (fin <= maintenant) return false;
 
     return Number.isFinite(vehicule.latitude) && Number.isFinite(vehicule.longitude);
   }
@@ -72,7 +110,7 @@
 
   function afficherCarte(vehicules) {
     if (typeof L === "undefined") {
-      afficherNotification("La carte n'a pas pu être chargée.", "erreur");
+      afficherNotification("La carte n'a pas pu être chargée.");
       return;
     }
 
@@ -99,43 +137,41 @@
   }
 
   async function initialiser() {
-    const utilisateur = lireJsonSession();
+    let utilisateur = lireUtilisateurConnecte();
+
+    if (typeof window.exigerConnexion === "function") {
+      utilisateur = window.exigerConnexion("locataire");
+    } else if (window.ParkSpotSession?.exigerConnexion) {
+      utilisateur = window.ParkSpotSession.exigerConnexion("locataire");
+    }
 
     if (!utilisateur) {
-      afficherNotification("Vous devez être connecté pour consulter vos véhicules.", "erreur");
+      afficherNotification("Vous devez être connecté comme locataire pour consulter vos véhicules.");
       return;
     }
 
     try {
-      const reponse = await fetch(`data/${determineDataset()}.json`);
-      if (!reponse.ok) throw new Error("Impossible de charger les données.");
+      const donnees = await chargerDonneesLocales();
+      if (!donnees) throw new Error("Impossible de charger les données locales.");
 
-      const donnees = await reponse.json();
-
-      const compte = (donnees.utilisateurs || []).find((user) => user.id === utilisateur.id);
-      if (!compte || compte.role !== "locataire") {
-        afficherNotification("Seuls les locataires peuvent consulter cette page.", "erreur");
-        return;
-      }
-
-      // Un locataire ne reçoit que ses propres véhicules actifs pendant le stationnement.
+      // Accès limité aux véhicules du locataire connecté.
       const vehicules = (donnees.vehicules || []).filter((vehicule) =>
         vehicule.idLocataire === utilisateur.id &&
         stationnementActif(vehicule, donnees.dateDuJour)
       );
 
       if (vehicules.length === 0) {
-        afficherNotification("Il n'y a pas de véhicules à afficher pour l'instant.", "info");
+        afficherNotification("Il n'y a pas de véhicules à afficher pour l'instant.");
         afficherListe([]);
         afficherCarte([]);
         return;
       }
 
-      afficherNotification(`${vehicules.length} véhicule(s) stationné(s) trouvé(s).`, "succes");
+      afficherNotification(`${vehicules.length} véhicule(s) stationné(s) trouvé(s).`);
       afficherListe(vehicules);
       afficherCarte(vehicules);
     } catch (erreur) {
-      afficherNotification("Une erreur est survenue lors du chargement des véhicules.", "erreur");
+      afficherNotification("Une erreur est survenue lors du chargement des véhicules.");
       console.error(erreur);
     }
   }
