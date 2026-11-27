@@ -1,0 +1,59 @@
+:root {
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  color: #172b36;
+  background: #f3f7f7;
+  font-synthesis: none;
+  line-height: 1.5;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-width: 320px; }
+.site-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem max(1.25rem, calc((100% - 1000px) / 2)); background: #fff; border-bottom: 1px solid #dce7e7; }
+.brand { color: #087e78; font-weight: 800; font-size: 1.3rem; text-decoration: none; }
+.site-header span { color: #526771; font-size: .94rem; }
+.page { width: min(100% - 2rem, 900px); margin: 2.5rem auto; }
+.intro { margin-bottom: 1.5rem; }
+h1, h2, h3, p { margin-top: 0; }
+h1 { margin-bottom: .5rem; font-size: clamp(1.8rem, 4vw, 2.5rem); line-height: 1.15; }
+h2 { margin-bottom: .75rem; font-size: 1.25rem; }
+h3 { margin: 0; font-size: 1.02rem; line-height: 1.4; }
+.intro > p:last-child, .hint { color: #5e717a; }
+.eyebrow { margin-bottom: .3rem; color: #087e78; font-size: .75rem; font-weight: 800; letter-spacing: .09em; text-transform: uppercase; }
+.panel { margin: 1rem 0; padding: 1.4rem; background: #fff; border: 1px solid #dce7e7; border-radius: 14px; box-shadow: 0 5px 18px #173f4b0a; }
+.controls h2 { margin-bottom: 1rem; }
+.control-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+label { display: grid; gap: .4rem; color: #344c56; font-size: .9rem; font-weight: 650; }
+select { width: 100%; min-height: 42px; padding: .55rem .7rem; color: #172b36; background: #fff; border: 1px solid #b9cbcd; border-radius: 8px; font: inherit; }
+select:disabled { background: #f4f7f7; }
+.hint { margin: .8rem 0 0; font-size: .87rem; }
+.section-heading, .title-row { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.parking-list { display: grid; gap: .8rem; }
+.parking-card { display: flex; align-items: center; justify-content: space-between; gap: 1.25rem; padding: 1rem; border: 1px solid #e0e9e9; border-radius: 10px; }
+.parking-info { min-width: 0; flex: 1; }
+.parking-info > p { margin: .4rem 0 .65rem; color: #526771; font-size: .91rem; }
+.badge { flex: 0 0 auto; padding: .25rem .6rem; border-radius: 99px; font-size: .76rem; font-weight: 750; }
+.badge.free { color: #126b44; background: #e3f5eb; }
+.badge.busy { color: #8a3f29; background: #fff0e9; }
+.hours-label { display: inline-block; margin-right: .5rem; font-size: .85rem; }
+.hours-label + select { display: inline-block; width: auto; min-height: 34px; padding: .25rem .5rem; font-size: .85rem; }
+.button { flex: 0 0 auto; min-height: 42px; padding: .6rem 1rem; color: #fff; background: #087e78; border: 0; border-radius: 8px; font: inherit; font-weight: 750; cursor: pointer; }
+.button:hover { background: #066761; }
+.button:focus-visible, select:focus-visible { outline: 3px solid #54c7bd; outline-offset: 2px; }
+.notice { margin: 1rem 0; padding: .9rem 1rem; border-radius: 9px; }
+.notice.error { color: #872e2e; background: #fff0ef; border: 1px solid #f1cbc7; }
+.notice.success { color: #145b3c; background: #e8f7ee; border: 1px solid #c7ead4; }
+.receipt dl { margin: 1rem 0 0; }
+.receipt dl > div { display: flex; justify-content: space-between; gap: 1rem; padding: .55rem 0; border-bottom: 1px solid #edf1f1; }
+.receipt dt { color: #5e717a; }
+.receipt dd { margin: 0; text-align: right; font-weight: 650; }
+.receipt .total { margin-top: .3rem; padding-top: .85rem; font-size: 1.1rem; font-weight: 800; }
+.receipt .total dt, .receipt .total dd { color: #087e78; }
+footer { padding: 1rem; color: #667981; text-align: center; font-size: .83rem; }
+@media (max-width: 600px) {
+  .site-header { align-items: flex-start; flex-direction: column; gap: .1rem; }
+  .page { margin: 1.5rem auto; }
+  .control-grid { grid-template-columns: 1fr; }
+  .parking-card { align-items: stretch; flex-direction: column; }
+  .parking-card .button { width: 100%; }
+  .title-row { flex-wrap: wrap; }
+}

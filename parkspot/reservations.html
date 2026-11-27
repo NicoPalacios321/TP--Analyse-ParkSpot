@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mes réservations | ParkSpot</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <style>
+    #annuler-reservation {
+      color: #fff;
+      background: #b42318;
+    }
+    #annuler-reservation:hover:not(:disabled) {
+      background: #8f1d15;
+    }
+    #annuler-reservation:disabled {
+      color: #fff;
+      background: #b42318;
+      cursor: not-allowed;
+      opacity: .45;
+      filter: grayscale(.25);
+    }
+  </style>
+  <style>
+    .map-legend { display: inline-block; width: .7rem; height: .7rem; margin: 0 .3rem 0 .8rem; border-radius: 50%; background: #168aad; }
+    .map-legend.reservation { background: #d94841; }
+  </style>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer crossorigin=""></script>
+  <script src="js/donnees.js" defer></script>
+  <script src="js/reservation.js" defer></script>
+</head>
+<body>
+  <header class="site-header"><a class="brand" href="stationnement.html">ParkSpot</a><nav><a href="stationnement.html">Réserver un stationnement</a></nav></header>
+  <main class="page">
+    <section class="intro">
+      <p class="eyebrow">Espace locataire</p>
+      <h1>Mes réservations</h1>
+      <p id="utilisateur-connecte">Chargement du compte…</p>
+    </section>
+    <section class="panel" aria-labelledby="carte-reservations-titre">
+      <div class="section-heading"><div><p class="eyebrow">Carte</p><h2 id="carte-reservations-titre">Stationnements et réservations</h2></div></div>
+      <p class="hint"><span class="map-legend"></span> Stationnement <span class="map-legend reservation"></span> Mes réservations</p>
+      <div id="carte-reservations" role="application" aria-label="Carte des stationnements et de mes réservations à Montréal et Longueuil" style="height: 380px; min-height: 280px; width: 100%; border-radius: 10px;"></div>
+      <p id="erreur-carte-reservations" class="hint" hidden></p>
+    </section>
+    <section class="panel" aria-labelledby="reservations-titre">
+      <div class="section-heading"><div><p class="eyebrow">Historique</p><h2 id="reservations-titre">Réservations confirmées</h2></div><span id="compte-reservations" class="hint"></span></div>
+      <div id="liste-reservations" class="parking-list" aria-live="polite"><p>Chargement des réservations…</p></div>
+    </section>
+    <section id="details-reservation" class="panel receipt" aria-labelledby="details-reservation-titre" hidden>
+      <p class="eyebrow">Détails</p>
+      <h2 id="details-reservation-titre">Réservation</h2>
+      <dl id="contenu-details-reservation"></dl>
+      <p id="message-annulation" class="hint" aria-live="polite"></p>
+      <button id="annuler-reservation" class="button" type="button">Annuler la réservation</button>
+    </section>
+  </main>
+  <footer>ParkSpot · Historique enregistré dans ce navigateur.</footer>
+</body>
+</html>

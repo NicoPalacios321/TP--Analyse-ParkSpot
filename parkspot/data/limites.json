@@ -78,30 +78,53 @@
       "prixHoraire": 3.50,
       "latitude": 45.5370,
       "longitude": -73.5100,
-      "reserve": false
+      "reserve": true
     },
     {
       "id": "s2",
       "idProprietaire": "u3",
-      "adresse": "12345 boulevard du Président-John-Fitzgerald-Kennedy, local 1200, stationnement intérieur niveau P3, entrée par la ruelle derrière le dépanneur, Montréal (Québec) H3B 4W8",
+      "adresse": "1450, rue Saint-Urbain, Montréal (Québec) H2X 2M5 — stationnement intérieur de la Place des Arts, entrée sur Saint-Urbain, secteurs P1, P2 et P3, à proximité des salles de spectacle",
       "type": "souterrain",
       "prixHoraire": 99.99,
-      "latitude": 45.5048,
-      "longitude": -73.5698,
+      "latitude": 45.508700,
+      "longitude": -73.566600,
       "reserve": false
     },
     {
       "id": "s3",
       "idProprietaire": "u3",
-      "adresse": "1 rue A, Longueuil",
+      "adresse": "2500 boulevard Taschereau, Longueuil",
       "type": "ruelle",
       "prixHoraire": 0.50,
-      "latitude": 45.5310,
-      "longitude": -73.5180,
-      "reserve": false
+      "latitude": 45.500605,
+      "longitude": -73.488199,
+      "reserve": true
     }
   ],
-  "reservations": [],
+  "reservations": [
+    {
+      "id": "r1",
+      "idLocataire": "u1",
+      "idStationnement": "s1",
+      "idMethode": "m1",
+      "nbHeures": 1,
+      "prix": 3.50,
+      "date": "2026-12-03T12:00",
+      "dateDebut": "2026-12-06T12:00:00",
+      "statut": "Confirmée"
+    },
+    {
+      "id": "r2",
+      "idLocataire": "u1",
+      "idStationnement": "s3",
+      "idMethode": "m2",
+      "nbHeures": 1,
+      "prix": 0.50,
+      "date": "2026-12-03T12:00",
+      "dateDebut": "2026-12-04T12:00:00",
+      "statut": "Confirmée"
+    }
+  ],
   "vehicules": [
     {
       "id": "v1",

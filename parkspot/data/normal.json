@@ -88,18 +88,18 @@
       "adresse": "1000 boulevard De Maisonneuve Ouest, Montréal",
       "type": "souterrain",
       "prixHoraire": 6.00,
-      "latitude": 45.5017,
-      "longitude": -73.5673,
+      "latitude": 45.500926,
+      "longitude": -73.574406,
       "reserve": true
     },
     {
       "id": "s4",
       "idProprietaire": "u4",
-      "adresse": "2500 boulevard Taschereau, Greenfield Park",
+      "adresse": "2500 boulevard Taschereau, Longueuil",
       "type": "courMaison",
       "prixHoraire": 2.75,
-      "latitude": 45.4870,
-      "longitude": -73.4800,
+      "latitude": 45.500605,
+      "longitude": -73.488199,
       "reserve": false
     }
   ],
@@ -112,6 +112,7 @@
       "nbHeures": 2,
       "prix": 12.00,
       "date": "2026-12-02T09:00",
+      "dateDebut": "2026-12-06T09:00:00",
       "statut": "Confirmée"
     }
   ],

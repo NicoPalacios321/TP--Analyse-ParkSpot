@@ -84,8 +84,8 @@
       "adresse": "1000 boulevard De Maisonneuve Ouest, Montréal",
       "type": "souterrain",
       "prixHoraire": 6.00,
-      "latitude": 45.5017,
-      "longitude": -73.5673,
+      "latitude": 45.500926,
+      "longitude": -73.574406,
       "reserve": true
     },
     {
@@ -101,7 +101,7 @@
     {
       "id": "s3",
       "idProprietaire": "u3",
-      "adresse": "125 rue Saint-Charles Ouest, Longueuil",
+      "adresse": "",
       "type": "courMaison",
       "prixHoraire": 3.50,
       "latitude": 45.5370,
@@ -118,6 +118,7 @@
       "nbHeures": 1,
       "prix": 6.00,
       "date": "2026-12-03T08:00",
+      "dateDebut": "2026-12-04T08:00:00",
       "statut": "Confirmée"
     },
     {
@@ -128,6 +129,7 @@
       "nbHeures": 1,
       "prix": 4.00,
       "date": "2026-12-01T10:00",
+      "dateDebut": "2026-12-01T10:00:00",
       "statut": "Terminée"
     }
   ],

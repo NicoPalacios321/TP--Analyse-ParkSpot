@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Réserver un stationnement | ParkSpot</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+  <style>
+    input[type="datetime-local"], #heures-reservation { width: 100%; min-height: 42px; padding: .55rem .7rem; color: #172b36; background: #fff; border: 1px solid #b9cbcd; border-radius: 8px; font: inherit; }
+    input[type="datetime-local"]:focus-visible { outline: 3px solid #54c7bd; outline-offset: 2px; }
+    .map-legend { display: inline-block; width: .7rem; height: .7rem; margin: 0 .3rem 0 .8rem; border-radius: 50%; background: #168aad; }
+    .map-legend.reservation { background: #d94841; }
+  </style>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer crossorigin=""></script>
+  <script src="js/donnees.js" defer></script>
+  <script src="js/reservation.js" defer></script>
+</head>
+<body>
+  <header class="site-header"><a class="brand" href="stationnement.html">ParkSpot</a><nav><a href="reservations.html">Mes réservations</a></nav></header>
+  <main class="page">
+    <section class="intro">
+      <p class="eyebrow">Espace locataire</p>
+      <h1>Réserver un stationnement</h1>
+      <p>Choisissez un stationnement libre, vérifiez le montant et confirmez le paiement.</p>
+    </section>
+
+    <section class="panel controls" aria-labelledby="demo-title">
+      <h2 id="demo-title">Données de démonstration</h2>
+      <div class="control-grid">
+        <label>Jeu de données
+          <select id="jeu-donnees"><option value="normal">Normal</option><option value="erreurs">Erreurs</option><option value="limites">Limites</option></select>
+        </label>
+        <label>Locataire
+          <select id="locataire" disabled><option>Chargement…</option></select>
+        </label>
+        <label>Méthode de paiement
+          <select id="methode-paiement" disabled><option>Chargement…</option></select>
+        </label>
+      </div>
+      <p class="hint">Sélectionnez un locataire pour simuler une session authentifiée. Les changements restent enregistrés dans ce navigateur.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="carte-stationnements-titre">
+      <div class="section-heading"><div><p class="eyebrow">Carte</p><h2 id="carte-stationnements-titre">Stationnements et réservations</h2></div><span id="compte-stationnements" class="hint"></span></div>
+      <p class="hint"><span class="map-legend free"></span> Stationnement <span class="map-legend reservation"></span> Réservation</p>
+      <div id="carte-stationnements" role="application" aria-label="Carte des stationnements et des réservations à Montréal et Longueuil" style="height: 480px; min-height: 320px; width: 100%; border-radius: 10px;"></div>
+      <p id="erreur-carte-stationnements" class="hint" hidden></p>
+    </section>
+
+    <form id="formulaire-reservation" class="panel" aria-labelledby="formulaire-reservation-titre" hidden>
+      <div class="section-heading"><div><p class="eyebrow">Réservation</p><h2 id="formulaire-reservation-titre">Réserver ce stationnement</h2></div></div>
+      <p id="stationnement-selectionne" class="hint"></p>
+      <label for="date-reservation">Date et heure du stationnement
+        <input id="date-reservation" type="datetime-local" required>
+      </label>
+      <p class="hint">La réservation doit commencer au moins deux heures après maintenant.</p>
+      <label for="heures-reservation">Durée
+        <select id="heures-reservation"><option value="1">1 heure</option><option value="2">2 heures</option><option value="3">3 heures</option><option value="4">4 heures</option></select>
+      </label>
+      <button id="confirmer-reservation" class="button" type="submit">Confirmer et payer</button>
+      <a class="hint" href="stationnement.html">Choisir un autre stationnement</a>
+    </form>
+    <div id="annonce" class="notice" role="status" aria-live="polite" hidden></div>
+    <section id="facture" class="panel receipt" aria-labelledby="facture-titre" hidden></section>
+  </main>
+  <footer>ParkSpot · Paiement de démonstration, aucune transaction bancaire réelle.</footer>
+</body>
+</html>
